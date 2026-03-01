@@ -4,12 +4,12 @@ import HydrateClient from "@/components/HydrateClient/HydrateClient";
 import NoteDetailsClient from "./NoteDetails.client";
 import type { Metadata } from "next";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const note = await fetchNoteById(params.id);
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await params;
+
+  const note = await fetchNoteById(id);
 
   const title = `NoteHub | ${note.title}`;
   const description =
@@ -21,7 +21,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://notehub.com/notes/${params.id}`,
+      url: `https://notehub.com/notes/${id}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
